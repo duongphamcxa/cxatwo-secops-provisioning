@@ -17,7 +17,7 @@ variable "PATH_TO_PUBLIC_KEY" {
 }
 
 resource "aws_instance" "instance" {
-  ami           = "ami-07fa4055a4e578d73" # ami-10e00b6d
+  ami           = "ami-08b3278ea6e379084" # 
   instance_type = var.INSTANCE_TYPE
 
   # the VPC subnet
