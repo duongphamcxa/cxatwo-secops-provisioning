@@ -13,11 +13,11 @@ variable "VPC_ID" {
 }
 
 variable "PATH_TO_PUBLIC_KEY" {
-  default = "mykey.pub"
+  default = ""
 }
 
 resource "aws_instance" "instance" {
-  ami           = "ami-07fa4055a4e578d73"
+  ami           = data.aws_ami.centos.id
   instance_type = var.INSTANCE_TYPE
 
   # the VPC subnet
@@ -62,6 +62,25 @@ resource "aws_security_group" "allow-ssh" {
 
 resource "aws_key_pair" "mykeypair" {
   key_name   = "mykeypair-${var.ENV}"
-  public_key = file("${path.root}/${var.PATH_TO_PUBLIC_KEY}")
+  public_key = file("${var.PATH_TO_PUBLIC_KEY}")
 }
 
+data "aws_ami" "centos" {
+  owners      = ["679593333241"]
+  most_recent = true
+
+  filter {
+      name   = "name"
+      values = ["CentOS Linux 7 x86_64 HVM EBS *"]
+  }
+
+  filter {
+      name   = "architecture"
+      values = ["x86_64"]
+  }
+
+  filter {
+      name   = "root-device-type"
+      values = ["ebs"]
+  }
+}
